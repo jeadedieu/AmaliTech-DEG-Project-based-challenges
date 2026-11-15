@@ -4,14 +4,22 @@
 
 ## A. Executive Summary
 
-Late deliveries at Veridi are a regional problem, not a nationwide one. Across 96,470 delivered orders, 93.2% arrived on or before the promised date, but the late rate ranges from 2.8% to 21.4% by state, and the Northeast and Rio de Janeiro receive 22% of orders while accounting for 40% of late deliveries. The delivery estimates are inaccurate in two directions: the typical order arrives 12 days early, yet the same cushion is too thin in the worst-affected states. Lateness is strongly linked to bad reviews, with on-time orders averaging 4.29 stars against 2.27 for late orders, and the drop beginning on the promised date. Late deliveries and low scores also spiked together in November 2017 and February-March 2018, which is most likely the spike the CEO noticed.
+Late deliveries at Veridi are a regional problem, not a nationwide one. Across 96,470 delivered orders, 93.2% arrived on or before the promised date, but the late rate ranges from 2.8% to 21.4% by state, and the Northeast and Rio de Janeiro receive 22% of orders while accounting for 40% of late deliveries. The delivery estimates are inaccurate in two directions: the typical order arrives 12 days early, yet the same margin is too small in the worst-affected states. Lateness is strongly linked to bad reviews, with on-time orders averaging 4.29 stars against 2.27 for late orders, and the drop beginning on the promised date. Late deliveries and low scores also spiked together in November 2017 and February-March 2018, which is most likely the spike the CEO noticed.
+
+| Key number | Value |
+|---|---|
+| Delivered orders analysed | 96,470 |
+| Arrived on or before the promised date | 93.2% |
+| Late rate, best state to worst state | 2.8% to 21.4% |
+| Average review score, on time vs late | 4.29 vs 2.27 |
+| Share of late deliveries in the Northeast and Rio de Janeiro | 40%, from 22% of orders |
 
 ## B. Project Links
 
 - **Notebook (Google Colab):** https://colab.research.google.com/drive/14l_2v3qqpQeu2gNnFVa8-zLCmHiEvJXX
-- **Dashboard (Looker Studio):** https://datastudio.google.com/reporting/cfd49ada-e159-4331-ade3-783673399adb
-- **Presentation:** [ ]
-- **Notebook files in this repo:** `last_mile_logistics_audit.ipynb` and `last_mile_logistics_audit.html`
+- **Dashboard (Google Data Studio, formerly Looker Studio):** https://datastudio.google.com/reporting/cfd49ada-e159-4331-ade3-783673399adb
+- **Presentation (slides):** https://drive.google.com/file/d/1n6Yf7RsyLFxXbYUvfy2Ag4y1WcKYqTpB/view
+- **Notebook files in this folder:** `last_mile_logistics_audit.ipynb` and its HTML export `last_mile_logistics_audit.html` (download the HTML and open it in a browser to see all charts)
 
 ## C. Technical Explanation
 
@@ -28,8 +36,26 @@ Late deliveries at Veridi are a regional problem, not a nationwide one. Across 9
 
 For each state, I calculated how many days would need to be added to the delivery estimate so that 95% of orders arrive on or before the promised date. The method takes the 95th percentile of the delay in days for each state with at least 200 orders, then replays past orders with the longer estimates.
 
-**Why it matters to the business:** the analysis shows that a missed promise costs about two review stars, while arriving earlier than promised earns almost nothing. The most direct way to protect review scores is therefore to make promises that hold. This shows where to act first and by how much: 19 of 23 states would need a longer estimate, with the largest gaps (+12 to +13 days) in the Northeast and Rio de Janeiro, while São Paulo and Minas Gerais need no change. Replaying history with these estimates would have avoided 2,143 broken promises, cutting the national late rate from 6.8% to 4.6%.
+**Why it matters to the business:** the analysis shows that a missed promise costs about two review stars, while arriving earlier than promised earns almost nothing. The most direct way to protect review scores is therefore to make promises that hold. This analysis shows where to act first and by how much: 19 of 23 states would need a longer estimate, with the largest gaps (+12 to +13 days) in the Northeast and Rio de Janeiro, while São Paulo and Minas Gerais need no change. Replaying history with these estimates would have avoided 2,143 broken promises, cutting the national late rate from 6.8% to 4.6%.
 
 **Limits:** this is a replay of past orders, not a forecast. It assumes delivery times stay the same and that longer estimates do not discourage customers from buying. The size of the adjustments also shows that the underlying issue is a minority of very late orders, which longer estimates alone cannot fully fix.
+
+### Where each requirement is answered
+
+| Requirement | Notebook section | Dashboard |
+|---|---|---|
+| Story 1: join orders, reviews and customers without duplicates | 2. Building the master table | One row per order feeds every chart |
+| Story 2: days difference, On Time / Late / Super Late, undelivered orders | 3. Calculating delivery delays | Score cards and the Delivery status filter |
+| Story 3: late rate by state, remote states | 4. Late deliveries by state | Map and state bar chart, Region filter |
+| Story 4: delay vs review score, On Time vs Late | 5. Delays and review scores | Review score charts and the monthly trend |
+| Bonus: categories in English | 6. Product categories in English | Category chart and Category filter |
+| Candidate's Choice | 7. Recalibrating the delivery promise | Explained above |
+
+### How to run the notebook
+
+1. Open the Colab link above and choose **Runtime > Run all**. No setup or API key is needed, because the dataset is public and is downloaded by the first cell.
+2. To run it locally, install `pandas`, `numpy`, `matplotlib` and `kagglehub`, then run the `.ipynb` from this folder.
+
+**Data source:** Olist Brazilian E-Commerce Public Dataset (Kaggle, CC BY-NC-SA 4.0).
 
 ---
